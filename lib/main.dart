@@ -3,30 +3,44 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:mobile_flutter/provider.dart';
+
 import 'package:mobile_flutter/weather_on_day.dart';
 import 'package:mobile_flutter/weather_on_week.dart';
+import 'package:mobile_flutter/load.dart';
+import 'package:provider/provider.dart';
+
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return const NeumorphicApp(
-      title: 'Simply weather app',
-      theme: NeumorphicThemeData(
-        intensity: 0.0,
-        depth: 0,
-      ),
-      home: MyHomePage(title: 'Weather app'),
+    return ChangeNotifierProvider<Settings>(
+        create: (context) => Settings(),
+        child: NeumorphicApp(
+          title: 'Simply weather app',
+          theme: const NeumorphicThemeData(
+            intensity: 0.0,
+            depth: 0,
+          ),
+          home: const MyHomePage(title: 'Weather app'),
+          routes: {
+            '/home': (context) => const MyHomePage(title: 'Weather app'),
+            '/load': (context) => const Load(),
+          },
+          initialRoute: '/home',
+        )
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -58,9 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 34),
-                child: const Text(
-                  'SAT NOV 10',
-                  style: TextStyle(
+                child:  Text(
+                  Provider.of<Settings>(context).setCurrentDay().toString().toUpperCase(),
+                  style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Authentic',
@@ -70,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 margin: const EdgeInsets.only(top: 2),
                 child: const Text(
-                  'sunrise 6:44 am | sunset 5:02  pm',
+                  'sunrise 6:44 am | sunset 5:02 pm',
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -159,4 +173,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
 }
