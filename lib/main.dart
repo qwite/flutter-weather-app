@@ -15,17 +15,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return NeumorphicApp(
+    return const NeumorphicApp(
       title: 'Flutter Demo',
       theme: NeumorphicThemeData(
         intensity: 0.0,
         depth: 0,
       ),
-      // theme: ThemeData(
-      //   primarySwatch: Colors.blue,
-      //   scaffoldBackgroundColor: Color(0xFF4A4981)
-      // ),
-      home: const MyHomePage(title: 'Weather app'),
+      home: MyHomePage(title: 'Weather app'),
     );
   }
 }
@@ -53,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
+              const Text(
                 'San Francisco, CA',
                 style: TextStyle(
                     fontSize: 24,
@@ -64,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 34),
-                child: Text(
+                child: const Text(
                   'SAT NOV 10',
                   style: TextStyle(
                       fontSize: 24,
@@ -75,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 2),
-                child: Text(
+                child: const Text(
                   'sunrise 6:44 am | sunset 5:02  pm',
                   style: TextStyle(
                       fontSize: 14,
@@ -84,14 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.grey),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 27,
               ),
               Container(
                 child: NeumorphicToggle(
-                  style: NeumorphicToggleStyle(
+                  style: const NeumorphicToggleStyle(
                     disableDepth: true,
-                    backgroundColor: const Color(0xff4A4981),
+                    backgroundColor: Color(0xff4A4981),
 
                     // borderRadius: BorderRadius.circular(15),
                   ),
@@ -99,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 32,
                   children: [
                     ToggleElement(
-                        background: Center(
+                        background: const Center(
                           child: Text(
                             'F',
                             style: TextStyle(
@@ -109,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
-                        foreground: Center(
+                        foreground: const Center(
                           child: Text(
                             'F',
                             style: TextStyle(
@@ -120,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         )),
                     ToggleElement(
-                      background: Center(
+                      background: const Center(
                         child: Text(
                           'C',
                           style: TextStyle(
@@ -130,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                      foreground: Center(
+                      foreground: const Center(
                         child: Text(
                           'C',
                           style: TextStyle(
@@ -155,129 +151,126 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              SizedBox(
-                height: 27,
+              const SizedBox(
+                height: 50,
               ),
-              Container(
-                // padding: EdgeInsets.only(left: 10, right: 17),
-                child: Row(
-                  textDirection: TextDirection.ltr,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'morning',
+              Row(
+                textDirection: TextDirection.ltr,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'morning',
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 19),
+                      SvgPicture.asset('assets/sun.fill.svg',
+                          height: 35, width: 35),
+                      const SizedBox(height: 19),
+                      const Text('45°',
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                          ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ))
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'afternoon',
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12,
                         ),
-                        SizedBox(height: 19),
-                        SvgPicture.asset('assets/sun.fill.svg',
-                            height: 35, width: 35),
-                        SizedBox(height: 19),
-                        Text('45°',
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                            ))
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'afternoon',
+                      ),
+                      const SizedBox(height: 19),
+                      SvgPicture.asset('assets/cloud.rain.svg',
+                          height: 35, width: 35),
+                      const SizedBox(height: 19),
+                      const Text('18°',
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                          ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ))
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'evening',
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12,
                         ),
-                        SizedBox(height: 19),
-                        SvgPicture.asset('assets/cloud.rain.svg',
-                            height: 35, width: 35),
-                        SizedBox(height: 19),
-                        Text('18°',
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                            ))
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'evening',
+                      ),
+                      const SizedBox(height: 19),
+                      SvgPicture.asset('assets/cloud.svg',
+                          height: 35, width: 35),
+                      const SizedBox(height: 19),
+                      const Text('22°',
                           textDirection: TextDirection.ltr,
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                          ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ))
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'night',
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 12,
                         ),
-                        SizedBox(height: 19),
-                        SvgPicture.asset('assets/cloud.svg',
-                            height: 35, width: 35),
-                        SizedBox(height: 19),
-                        Text('22°',
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                            ))
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'night',
-                          textDirection: TextDirection.ltr,
+                      ),
+                      const SizedBox(height: 19),
+                      SvgPicture.asset('assets/cloud.snow.svg',
+                          height: 35, width: 35),
+                      const SizedBox(height: 19),
+                      const Text('30°',
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                          ),
-                        ),
-                        SizedBox(height: 19),
-                        SvgPicture.asset('assets/cloud.snow.svg',
-                            height: 35, width: 35),
-                        SizedBox(height: 19),
-                        Text('30°',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                            ))
-                      ],
-                    ),
-                  ],
-                ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ))
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 100),
+              const SizedBox(height: 50),
               Container(
                   child: Row(
                   textDirection: TextDirection.ltr,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(7),
+                      padding: const EdgeInsets.all(7),
 
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                       color: Color(0xff6A639F),
                       borderRadius: BorderRadius.all(Radius.circular(10.0))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: const [
                           Text(
                             'MON',
                             textDirection: TextDirection.ltr,
@@ -292,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'TUE',
                           textDirection: TextDirection.ltr,
@@ -306,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'WED',
                           textDirection: TextDirection.ltr,
@@ -320,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'THU',
                           textDirection: TextDirection.ltr,
@@ -334,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'FRI',
                           textDirection: TextDirection.ltr,
@@ -348,7 +341,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'SAT',
                           textDirection: TextDirection.ltr,
@@ -362,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: const [
                         Text(
                           'SUN',
                           textDirection: TextDirection.ltr,
