@@ -3,20 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:mobile_flutter/weather_on_day.dart';
+import 'package:mobile_flutter/weather_on_week.dart';
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const NeumorphicApp(
-      title: 'Flutter Demo',
+      title: 'Simply weather app',
       theme: NeumorphicThemeData(
         intensity: 0.0,
         depth: 0,
@@ -41,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF4A4981),
+      backgroundColor: const Color(0xFF4A4981),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 17.0, top: 130.0, right: 17),
@@ -83,42 +81,20 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(
                 height: 27,
               ),
-              Container(
-                child: NeumorphicToggle(
-                  style: const NeumorphicToggleStyle(
-                    disableDepth: true,
-                    backgroundColor: Color(0xff4A4981),
+              NeumorphicToggle(
+                style: const NeumorphicToggleStyle(
+                  disableDepth: true,
+                  backgroundColor: Color(0xff4A4981),
 
-                    // borderRadius: BorderRadius.circular(15),
-                  ),
-                  width: 196,
-                  height: 32,
-                  children: [
-                    ToggleElement(
-                        background: const Center(
-                          child: Text(
-                            'F',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        foreground: const Center(
-                          child: Text(
-                            'F',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                        )),
-                    ToggleElement(
+                  // borderRadius: BorderRadius.circular(15),
+                ),
+                width: 196,
+                height: 32,
+                children: [
+                  ToggleElement(
                       background: const Center(
                         child: Text(
-                          'C',
+                          'F',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -128,248 +104,55 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       foreground: const Center(
                         child: Text(
-                          'C',
+                          'F',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 11,
                           ),
                         ),
+                      )),
+                  ToggleElement(
+                    background: const Center(
+                      child: Text(
+                        'C',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
-                  ],
-                  thumb: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    foreground: const Center(
+                      child: Text(
+                        'C',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      ),
                     ),
                   ),
-                  selectedIndex: toggleIndex,
-                  onChanged: (index) {
-                    setState(() {
-                      toggleIndex = index;
-                    });
-                  },
+                ],
+                thumb: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
                 ),
+                selectedIndex: toggleIndex,
+                onChanged: (index) {
+                  setState(() {
+                    toggleIndex = index;
+                  });
+                },
               ),
               const SizedBox(
                 height: 50,
               ),
-              Row(
-                textDirection: TextDirection.ltr,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'morning',
-                        textDirection: TextDirection.ltr,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 19),
-                      SvgPicture.asset('assets/sun.fill.svg',
-                          height: 35, width: 35),
-                      const SizedBox(height: 19),
-                      const Text('45°',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text(
-                        'afternoon',
-                        textDirection: TextDirection.ltr,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 19),
-                      SvgPicture.asset('assets/cloud.rain.svg',
-                          height: 35, width: 35),
-                      const SizedBox(height: 19),
-                      const Text('18°',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text(
-                        'evening',
-                        textDirection: TextDirection.ltr,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 19),
-                      SvgPicture.asset('assets/cloud.svg',
-                          height: 35, width: 35),
-                      const SizedBox(height: 19),
-                      const Text('22°',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const Text(
-                        'night',
-                        textDirection: TextDirection.ltr,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 19),
-                      SvgPicture.asset('assets/cloud.snow.svg',
-                          height: 35, width: 35),
-                      const SizedBox(height: 19),
-                      const Text('30°',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ))
-                    ],
-                  ),
-                ],
-              ),
+              WeatherOnDay(),
               const SizedBox(height: 50),
-              Container(
-                  child: Row(
-                  textDirection: TextDirection.ltr,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(7),
-
-                      decoration: const BoxDecoration(
-                      color: Color(0xff6A639F),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            'MON',
-                            textDirection: TextDirection.ltr,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'TUE',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'WED',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'THU',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'FRI',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'SAT',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'SUN',
-                          textDirection: TextDirection.ltr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-              ),
-                ),
+              WeatherOnWeek(),
             ],
           ),
         ),
