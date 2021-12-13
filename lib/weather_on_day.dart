@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mobile_flutter/provider.dart';
+import 'package:provider/provider.dart';
 
 class WeatherOnDay extends StatelessWidget {
   @override
@@ -25,7 +27,7 @@ class WeatherOnDay extends StatelessWidget {
             SvgPicture.asset('assets/sun.fill.svg',
                 height: 35, width: 35),
             const SizedBox(height: 19),
-            const Text('45°',
+             Text('${Provider.of<Settings>(context).settings["daily"]["morn_celcius"]}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   color: Colors.white,
@@ -37,7 +39,7 @@ class WeatherOnDay extends StatelessWidget {
         Column(
           children: [
             const Text(
-              'afternoon',
+              'day',
               textDirection: TextDirection.ltr,
               style: TextStyle(
                 color: Colors.white,
@@ -49,7 +51,7 @@ class WeatherOnDay extends StatelessWidget {
             SvgPicture.asset('assets/cloud.rain.svg',
                 height: 35, width: 35),
             const SizedBox(height: 19),
-            const Text('18°',
+            Text('${Provider.of<Settings>(context).settings["daily"]["day_celcius"]}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   color: Colors.white,
@@ -73,7 +75,7 @@ class WeatherOnDay extends StatelessWidget {
             SvgPicture.asset('assets/cloud.svg',
                 height: 35, width: 35),
             const SizedBox(height: 19),
-            const Text('22°',
+            Text('${Provider.of<Settings>(context).settings["daily"]["eve_celcius"]}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   color: Colors.white,
@@ -97,7 +99,7 @@ class WeatherOnDay extends StatelessWidget {
             SvgPicture.asset('assets/cloud.snow.svg',
                 height: 35, width: 35),
             const SizedBox(height: 19),
-            const Text('30°',
+            Text('${Provider.of<Settings>(context).settings["daily"]["night_celcius"]}°',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

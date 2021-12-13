@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:mobile_flutter/provider.dart';
+import 'package:mobile_flutter/weather_now.dart';
 
 import 'package:mobile_flutter/weather_on_day.dart';
 import 'package:mobile_flutter/weather_on_week.dart';
 import 'package:mobile_flutter/load.dart';
 import 'package:provider/provider.dart';
+import 'package:mobile_flutter/api.dart';
+
+import 'Models/weather_model.dart';
 
 
 void main() {
@@ -28,19 +32,21 @@ class MyApp extends StatelessWidget {
             intensity: 0.0,
             depth: 0,
           ),
-          home: const MyHomePage(title: 'Weather app'),
+          home: MyHomePage(title: 'Weather app'),
           routes: {
-            '/home': (context) => const MyHomePage(title: 'Weather app'),
+            '/home': (context) => MyHomePage(title: 'Weather app'),
             '/load': (context) => const Load(),
           },
-          initialRoute: '/home',
+          initialRoute: '/load',
         )
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  // Future<WeatherModel> _weatherModel;
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
   final String title;
 
   @override
@@ -49,6 +55,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int toggleIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var api = Api();
+    // weatherModel = api.getSunset("59.985174", "30.384144");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 margin: const EdgeInsets.only(top: 34),
                 child:  Text(
-                  Provider.of<Settings>(context).setCurrentDay().toString().toUpperCase(),
+                  Provider.of<Settings>(context).settings["current_dayOfWeek"].toString().toUpperCase(),
                   style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w400,
@@ -83,8 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 2),
-                child: const Text(
-                  'sunrise 6:44 am | sunset 5:02 pm',
+                child: Text(
+                  'sunrise ${Provider.of<Settings>(context).settings["sunrise_value"].toString()} am | sunset ${Provider.of<Settings>(context).settings["sunset_value"].toString()} pm',
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -108,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ToggleElement(
                       background: const Center(
                         child: Text(
-                          'F',
+                          'C',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -118,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       foreground: const Center(
                         child: Text(
-                          'F',
+                          'C',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -129,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ToggleElement(
                     background: const Center(
                       child: Text(
-                        'C',
+                        'F',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -139,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     foreground: const Center(
                       child: Text(
-                        'C',
+                        'F',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -166,6 +180,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               WeatherOnDay(),
               const SizedBox(height: 50),
+              WeatherNow(),
+              const SizedBox(height: 50),
+
               WeatherOnWeek(),
             ],
           ),

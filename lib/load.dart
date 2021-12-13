@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-
+import 'package:mobile_flutter/provider.dart';
+import 'package:provider/src/provider.dart';
+import 'package:mobile_flutter/api.dart';
+import 'package:mobile_flutter/Models/weather_model.dart';
 
 class Load extends StatefulWidget {
   const Load({
@@ -16,47 +19,34 @@ class Load extends StatefulWidget {
 
 class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
 
-  Future<Position> getUserLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+  void setUp() async {
+    await getCurrentDayInfo();
+    await makeApiRequest();
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
-  Future<String> getCurrentDayInfo() async {
+  Future<void> getCurrentDayInfo() async {
     final now = DateTime.now();
     String currentDay = DateFormat('MMMEd').format(now);
-
-    return currentDay;
+    return context.read<Settings>().setCurrentDay(currentDay);
   }
+
+  Future<void> makeApiRequest() async {
+    var api = Api();
+    WeatherModel _weatherModel;
+
+    _weatherModel = await api.getWeatherData("59.985174", "30.384144");
+    context.read<Settings>().setSunValues(_weatherModel.current.sunrise, _weatherModel.current.sunset);
+    context.read<Settings>().setTempValue(_weatherModel.current.temp);
+    context.read<Settings>().setDailyValue(_weatherModel.daily);
+
+  }
+
   @override
   void initState() {
     super.initState();
-
-    Navigator.pushReplacementNamed(context, '/home');
-
+    setUp();
   }
 
   @override
