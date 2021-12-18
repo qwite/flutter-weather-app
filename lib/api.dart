@@ -2,27 +2,28 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'Models/weather_model.dart';
+import 'package:mobile_flutter/Models/weather_timeline_model.dart';
 
 // https://api.openweathermap.org/data/2.5/onecall?lat=59.985174&lon=30.384144&exclude=hourly&appid=4dc1f9be001147a7adc779dc087c2a9d
 
 class Api {
   String endPoint = "api.openweathermap.org";
-  String apiUrl = "data/2.5/onecall";
+  String eveningApiUrl = "data/2.5/onecall";
+  String timelineApiUrl = "data/2.5/onecall/timemachine";
   String apiKey = "4dc1f9be001147a7adc779dc087c2a9d";
 
-  Future<WeatherModel> getWeatherData(String lat, String lon) async {
+  Future<WeatherTimeline> getTimelineData(String lat, String lon, String current_time) async {
     Map<String, String> queryParams = {
       'appid': apiKey,
       'lat': lat,
       'lon': lon,
-      'exclude': 'hourly',
-      "units": 'metric'
+      'units': 'metric',
+      'dt': current_time,
     };
 
     var client = http.Client();
-    var uri = Uri.https(endPoint, apiUrl, queryParams);
-    var weatherModel;
+    var uri = Uri.https(endPoint, timelineApiUrl, queryParams);
+    var timelineModel;
     try {
       var response = await client.get(uri);
 
@@ -30,13 +31,41 @@ class Api {
         var jsonString = response.body;
         var jsonMap = json.decode(jsonString);
 
-        weatherModel = WeatherModel.fromJson(jsonMap);
+        timelineModel = WeatherTimeline.fromJson(jsonMap);
       }
     } catch (Exception) {
-      return weatherModel;
+      return timelineModel;
     }
 
-    return weatherModel;
-
+    return timelineModel;
   }
+
+  Future<WeatherTimeline> getEveningData(String lat, String lon) async {
+    Map<String, String> queryParams = {
+      'appid': apiKey,
+      'lat': lat,
+      'lon': lon,
+      'units': 'metric',
+      'exclude': 'minutely'
+    };
+
+    var client = http.Client();
+    var uri = Uri.https(endPoint, eveningApiUrl, queryParams);
+    var eveningModel;
+    try {
+      var response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        var jsonMap = json.decode(jsonString);
+
+        eveningModel = WeatherTimeline.fromJson(jsonMap);
+      }
+    } catch (Exception) {
+      return eveningModel;
+    }
+
+    return eveningModel;
+  }
+
 }

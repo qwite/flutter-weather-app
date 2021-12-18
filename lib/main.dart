@@ -12,7 +12,6 @@ import 'package:mobile_flutter/load.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_flutter/api.dart';
 
-import 'Models/weather_model.dart';
 
 
 void main() {
@@ -60,8 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    var api = Api();
-    // weatherModel = api.getSunset("59.985174", "30.384144");
   }
 
   @override
