@@ -18,16 +18,15 @@ class Load extends StatefulWidget {
 }
 
 class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
-
-
   void setUp() async {
-
     await getCurrentDayInfo();
     await getCurrentTime();
+    await prepareWeeklyMap();
     await makeApiRequest();
 
     Navigator.pushReplacementNamed(context, '/home');
   }
+
   Future<void> getCurrentTime() async {
     final now = DateTime.now().millisecondsSinceEpoch;
     var time = (now / 1000).round().toString();
@@ -47,22 +46,20 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
     WeatherTimeline _eveningModel;
     var currentTime = context.read<Settings>().getCurrentTime();
     var key = context.read<Settings>().getCurentDayKey();
-    print(key);
+
     print(currentTime);
 
-    _timelineModel = await api.getTimelineData("59.985174", "30.384144", currentTime);
+    _timelineModel =
+        await api.getTimelineData("59.985174", "30.384144", currentTime);
     _eveningModel = await api.getEveningData("59.985174", "30.384144");
 
     print(_timelineModel.hourly.length);
     parseData(_timelineModel.hourly); // обрабатываем данные день-утро
     parseData(_eveningModel.hourly); // обрабатываем данные вечер-ночь
 
-    context.read<Settings>().setSunValues(_timelineModel.current.sunrise, _timelineModel.current.sunset);
+    context.read<Settings>().setSunValues(
+        _timelineModel.current.sunrise, _timelineModel.current.sunset);
     context.read<Settings>().setTempValue(_timelineModel.current.temp);
-
-    var daily_data = context.read<Settings>().getDailyData();
-    print(daily_data);
-
 
   }
 
@@ -74,20 +71,21 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
       var hour_format = DateFormat('hh:mm a').format(hour);
       var temp = data[i].temp;
       var weather = data[i].weather[0].main;
+      var key = context.read<Settings>().getCurentDayKey();
       print(hour_format);
 
       switch (hour_format) {
         case "06:00 AM":
-          context.read<Settings>().pushMorning(temp, weather);
+          context.read<Settings>().pushMorning(temp, weather, key);
           break;
         case "12:00 PM":
-          context.read<Settings>().pushDay(temp, weather);
+          context.read<Settings>().pushDay(temp, weather, key);
           break;
         case "06:00 PM":
-          context.read<Settings>().pushEvening(temp, weather);
+          context.read<Settings>().pushEvening(temp, weather, key);
           break;
         case "12:00 AM":
-          context.read<Settings>().pushNight(temp, weather);
+          context.read<Settings>().pushNight(temp, weather, key);
           fl = true;
           break;
       }
@@ -95,7 +93,24 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
       if (fl) {
         break;
       }
+
     }
+  }
+
+  Future<void> prepareWeeklyMap() async {
+    Map data = {
+      "morning": {"temp": "", "weather": ""},
+      "day": {"temp": "", "weather": ""},
+      "evening": {"temp": "", "weather": ""},
+      "night": {"temp": "", "weather": ""}
+    };
+
+    var _settings = Settings.weekly_config;
+    for (var k in _settings.keys) {
+      _settings[k] = data;
+    }
+
+    return;
   }
 
   @override
@@ -116,7 +131,7 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
             child: const Text(
               'Loading...',
               style: TextStyle(
-              color: Colors.white,
+                color: Colors.white,
                 fontSize: 15,
               ),
             ),

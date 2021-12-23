@@ -4,7 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mobile_flutter/provider.dart';
 import 'package:provider/provider.dart';
 
+
 class WeatherNow extends StatelessWidget {
+  const WeatherNow({Key? key}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,3 +27,4 @@ class WeatherNow extends StatelessWidget {
     );
   }
 }
+
