@@ -6,6 +6,7 @@ class Settings extends ChangeNotifier {
     "city": "Saint Petersburg",
     "country": "RU",
     "current_dayOfWeek": "",
+    "current_dayOfWeekKey": "",
     "current_timeTimestamp": "",
     "current_temp_celsius": "",
     "current_temp_fahrenheit": "",
@@ -57,14 +58,22 @@ class Settings extends ChangeNotifier {
 
 
 
-  void setCurrentDay(String currentDay) {
+
+  void setCurrentDay(String currentDay, String currentDayKey) {
      settings["current_dayOfWeek"] = currentDay;
+     settings["current_dayOfWeekKey"] = currentDayKey;
+
      notifyListeners();
   }
 
   void setCurrentTime(String currentTime) {
     settings["current_timeTimestamp"] = currentTime;
   }
+
+  String getCurentDayKey() {
+    return settings["current_dayOfWeekKey"];
+  }
+
 
   String getCurrentTime() {
     return settings["current_timeTimestamp"];

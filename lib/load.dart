@@ -21,6 +21,7 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
 
 
   void setUp() async {
+
     await getCurrentDayInfo();
     await getCurrentTime();
     await makeApiRequest();
@@ -36,7 +37,8 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
   Future<void> getCurrentDayInfo() async {
     final now = DateTime.now();
     String currentDay = DateFormat('MMMEd').format(now);
-    return context.read<Settings>().setCurrentDay(currentDay);
+    String key = DateFormat('E').format(now).toUpperCase();
+    return context.read<Settings>().setCurrentDay(currentDay, key);
   }
 
   Future<void> makeApiRequest() async {
@@ -44,6 +46,8 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
     WeatherTimeline _timelineModel;
     WeatherTimeline _eveningModel;
     var currentTime = context.read<Settings>().getCurrentTime();
+    var key = context.read<Settings>().getCurentDayKey();
+    print(key);
     print(currentTime);
 
     _timelineModel = await api.getTimelineData("59.985174", "30.384144", currentTime);
