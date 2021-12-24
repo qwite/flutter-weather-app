@@ -50,7 +50,7 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
     print(currentTime);
 
     _timelineModel =
-        await api.getTimelineData("59.985174", "30.384144", currentTime);
+        (await api.getTimelineData("59.985174", "30.384144", currentTime))!;
     _eveningModel = await api.getEveningData("59.985174", "30.384144");
 
     print(_timelineModel.hourly.length);
@@ -60,7 +60,6 @@ class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
     context.read<Settings>().setSunValues(
         _timelineModel.current.sunrise, _timelineModel.current.sunset);
     context.read<Settings>().setTempValue(_timelineModel.current.temp);
-
   }
 
   void parseData(data) {

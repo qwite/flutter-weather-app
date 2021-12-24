@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class WeatherOnWeek extends StatelessWidget {
+class WeatherOnWeek extends StatefulWidget {
   const WeatherOnWeek({Key? key}) : super(key: key);
 
+  @override
+  State<WeatherOnWeek> createState() => _WeatherOnWeekState();
+}
+
+class _WeatherOnWeekState extends State<WeatherOnWeek> {
   @override
   Widget build(BuildContext context) {
     return Row(

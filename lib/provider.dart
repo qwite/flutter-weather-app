@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class Settings extends ChangeNotifier {
-   Map settings = {
+  Map settings = {
     "city": "Saint Petersburg",
     "country": "RU",
     "current_dayOfWeek": "",
@@ -20,8 +20,14 @@ class Settings extends ChangeNotifier {
     }
   };
 
-   static Map weekly_config = {
-    "MON": {}, "TUE": {}, "WED": {}, "THU": {}, "FRI": {}, "SAT": {}, "SUN": {},
+  static Map weekly_config = {
+    "MON": {},
+    "TUE": {},
+    "WED": {},
+    "THU": {},
+    "FRI": {},
+    "SAT": {},
+    "SUN": {},
   };
 
   void pushMorning(temp, weather, key) {
@@ -116,7 +122,7 @@ class Settings extends ChangeNotifier {
     settings["sunset_value"] = sunsetFormat;
   }
 
-  void setTempValue(double temp) {
+  void setTempValue(num temp) {
     var tempInCelsius = temp.toStringAsFixed(0);
     settings["current_temp_celsius"] = tempInCelsius;
     settings["current_temp_fahrenheit"] =
