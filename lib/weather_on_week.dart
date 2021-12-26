@@ -1,123 +1,86 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class WeatherOnWeek extends StatefulWidget {
-  const WeatherOnWeek({Key? key}) : super(key: key);
-
   @override
   State<WeatherOnWeek> createState() => _WeatherOnWeekState();
 }
 
 class _WeatherOnWeekState extends State<WeatherOnWeek> {
+  int toggleIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       textDirection: TextDirection.ltr,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(7),
-          decoration: const BoxDecoration(
-              color: Color(0xff6A639F),
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'MON',
-                textDirection: TextDirection.ltr,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 18,
+        NeumorphicToggle(
+          style: const NeumorphicToggleStyle(
+            disableDepth: true,
+            backgroundColor: Color(0xff4A4981),
+
+            // borderRadius: BorderRadius.circular(15),
+          ),
+          width: 196,
+          height: 32,
+          children: [
+            ToggleElement(
+                background: const Center(
+                  child: Text(
+                    'C',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                foreground: const Center(
+                  child: Text(
+                    'C',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )),
+            ToggleElement(
+              background: const Center(
+                child: Text(
+                  'F',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
                 ),
               ),
-            ],
+              foreground: const Center(
+                child: Text(
+                  'F',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          thumb: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
           ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'TUE',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'WED',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'THU',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'FRI',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'SAT',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text(
-              'SUN',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-              ),
-            ),
-          ],
+          selectedIndex: toggleIndex,
+          onChanged: (index) {
+            setState(() {
+              toggleIndex = index;
+            });
+          },
         ),
       ],
     );

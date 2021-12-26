@@ -40,6 +40,7 @@ class Api {
     } catch (Exception) {
       return null;
     }
+
     log(timelineModel.toString());
     return timelineModel;
   }
