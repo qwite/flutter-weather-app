@@ -11,6 +11,8 @@ import 'package:mobile_flutter/weather_on_week.dart';
 import 'package:mobile_flutter/load.dart';
 import 'package:provider/provider.dart';
 
+import 'icons_row.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -174,8 +176,9 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 50),
               WeatherNow(),
               const SizedBox(height: 50),
-
               WeatherOnWeek(),
+              const SizedBox(height: 5),
+              IconsRow(),
             ],
           ),
         ),

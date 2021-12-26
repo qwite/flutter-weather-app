@@ -27,11 +27,7 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            // SvgPicture.asset(
-            //     Provider.of<Settings>(context).getWeatherIcon("morning", key),
-            //     height: 35,
-            //     width: 35),
-            const SizedBox(height: 19),
+            const SizedBox(height: 5),
             Text('${Provider.of<Settings>(context).getMorningTemp()}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
@@ -53,11 +49,7 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            // SvgPicture.asset(
-            //     '${Provider.of<Settings>(context).getWeatherIcon("day", key)}',
-            //     height: 35,
-            //     width: 35),
-            const SizedBox(height: 19),
+            const SizedBox(height: 5),
             Text('${Provider.of<Settings>(context).getDayTemp()}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
@@ -83,7 +75,7 @@ class WeatherOnDay extends StatelessWidget {
             //     '${Provider.of<Settings>(context).getWeatherIcon("evening", key)}',
             //     height: 35,
             //     width: 35),
-            const SizedBox(height: 19),
+            const SizedBox(height: 5),
             Text('${Provider.of<Settings>(context).getEveningTemp()}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
@@ -105,11 +97,7 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            // SvgPicture.asset(
-            //     '${Provider.of<Settings>(context).getWeatherIcon("night", key)}',
-            //     height: 35,
-            //     width: 35),
-            const SizedBox(height: 19),
+            const SizedBox(height: 5),
             Text('${Provider.of<Settings>(context).getNightTemp()}°',
                 style: TextStyle(
                   color: Colors.white,

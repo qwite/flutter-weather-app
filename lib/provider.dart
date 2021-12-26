@@ -31,6 +31,7 @@ class Settings extends ChangeNotifier {
 
   List<Daily> dailyData = [];
   List dailyKeys = [];
+  List dailyIcons = [];
 
   static var tempIndex = 0;
 
@@ -39,11 +40,13 @@ class Settings extends ChangeNotifier {
     for (var val in daily) {
       var dt = DateTime.fromMillisecondsSinceEpoch(val.dt * 1000);
       String key = DateFormat('E').format(dt).toUpperCase();
+      String icon = val.weather[0].main;
 
-      // String key = DateFormat('E').format(DateTime(val.dt)).toUpperCase();
+      dailyIcons.add(icon);
       dailyKeys.add(key);
     }
     log(dailyKeys.toString());
+    log(dailyIcons.toString());
 
     // log(dailyKeys.toString());
 
@@ -189,23 +192,22 @@ class Settings extends ChangeNotifier {
     config["position_long"] = pos.longitude;
   }
 
-// String getWeatherIcon(dayState, key) {
-//   var weather = config["daily"][dayState]["weather"];
-//   var asset = "";
-//   switch (weather) {
-//     case "Sun":
-//       asset = "sun.fill";
-//       break;
-//     case "Clouds":
-//       asset = "cloud";
-//       break;
-//     case "Rain":
-//       asset = "cloud.rain";
-//       break;
-//     case "Snow":
-//       asset = "cloud.snow";
-//   }
-//
-//   return "assets/$asset.svg";
-// }
+  String getWeatherIcon(index) {
+    var asset = "";
+    switch (dailyIcons[index]) {
+      case "Sun":
+        asset = "sun.fill";
+        break;
+      case "Clouds":
+        asset = "cloud";
+        break;
+      case "Rain":
+        asset = "cloud.rain";
+        break;
+      case "Snow":
+        asset = "cloud.snow";
+    }
+
+    return "assets/$asset.svg";
+  }
 }

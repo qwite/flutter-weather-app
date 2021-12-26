@@ -41,18 +41,38 @@ class Current {
 class Hourly {
   final int dt;
   final num temp;
-  final List<Weather> weather;
 
-  Hourly(this.dt, this.temp, this.weather);
+  Hourly(this.dt, this.temp);
 
   factory Hourly.fromJson(Map<String, dynamic> json) {
-    return Hourly(json['dt'], json['temp'],
-        List<Weather>.from(json["weather"].map((x) => Weather.fromJson(x))));
+    return Hourly(json['dt'], json['temp']);
+  }
+
+}
+
+
+
+class Daily {
+  final int dt;
+  final int sunrise;
+  final int sunset;
+  final Temp temp;
+  List<Weather> weather;
+
+  Daily(this.dt, this.sunrise, this.sunset, this.temp, this.weather);
+
+  factory Daily.fromJson(Map<String, dynamic> json) {
+    return Daily(
+        json['dt'],
+        json['sunrise'],
+        json['sunset'],
+        Temp.fromJson(json['temp']),
+        List<Weather>.from(json['weather'].map((x) => Weather.fromJson(x))));
   }
 
   @override
   String toString() {
-    return 'Hourly{dt: $dt, temp: $temp, weather: $weather}';
+    return '{dt: $dt, sunrise: $sunrise, sunset: $sunset, temp: $temp}';
   }
 }
 
@@ -68,25 +88,6 @@ class Weather {
   @override
   String toString() {
     return 'Weather{main: $main}';
-  }
-}
-
-class Daily {
-  final int dt;
-  final int sunrise;
-  final int sunset;
-  final Temp temp;
-
-  Daily(this.dt, this.sunrise, this.sunset, this.temp);
-
-  factory Daily.fromJson(Map<String, dynamic> json) {
-    return Daily(json['dt'], json['sunrise'], json['sunset'],
-        Temp.fromJson(json['temp']));
-  }
-
-  @override
-  String toString() {
-    return '{dt: $dt, sunrise: $sunrise, sunset: $sunset, temp: $temp}';
   }
 }
 
