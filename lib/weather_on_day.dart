@@ -10,8 +10,6 @@ class WeatherOnDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var key = Provider.of<Settings>(context).getCurentDayKey();
-    print(key);
     return Row(
       textDirection: TextDirection.ltr,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -29,13 +27,12 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            SvgPicture.asset(
-                Provider.of<Settings>(context).getWeatherIcon("morning", key),
-                height: 35,
-                width: 35),
+            // SvgPicture.asset(
+            //     Provider.of<Settings>(context).getWeatherIcon("morning", key),
+            //     height: 35,
+            //     width: 35),
             const SizedBox(height: 19),
-            Text(
-                '${Settings.weekly_config[key]["morning"]["temp"]}°',
+            Text('${Provider.of<Settings>(context).getMorningTemp()}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   color: Colors.white,
@@ -56,13 +53,12 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            SvgPicture.asset(
-                '${Provider.of<Settings>(context).getWeatherIcon("day", key)}',
-                height: 35,
-                width: 35),
+            // SvgPicture.asset(
+            //     '${Provider.of<Settings>(context).getWeatherIcon("day", key)}',
+            //     height: 35,
+            //     width: 35),
             const SizedBox(height: 19),
-            Text(
-                '${Settings.weekly_config[key]["day"]["temp"]}°',
+            Text('${Provider.of<Settings>(context).getDayTemp()}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   color: Colors.white,
@@ -83,13 +79,12 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            SvgPicture.asset(
-                '${Provider.of<Settings>(context).getWeatherIcon("evening", key)}',
-                height: 35,
-                width: 35),
+            // SvgPicture.asset(
+            //     '${Provider.of<Settings>(context).getWeatherIcon("evening", key)}',
+            //     height: 35,
+            //     width: 35),
             const SizedBox(height: 19),
-            Text(
-                '${Settings.weekly_config[key]["evening"]["temp"]}°',
+            Text('${Provider.of<Settings>(context).getEveningTemp()}°',
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                   color: Colors.white,
@@ -110,13 +105,12 @@ class WeatherOnDay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 19),
-            SvgPicture.asset(
-                '${Provider.of<Settings>(context).getWeatherIcon("night", key)}',
-                height: 35,
-                width: 35),
+            // SvgPicture.asset(
+            //     '${Provider.of<Settings>(context).getWeatherIcon("night", key)}',
+            //     height: 35,
+            //     width: 35),
             const SizedBox(height: 19),
-            Text(
-                '${Settings.weekly_config[key]["night"]["temp"]}°',
+            Text('${Provider.of<Settings>(context).getNightTemp()}°',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

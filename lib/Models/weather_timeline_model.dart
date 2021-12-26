@@ -86,7 +86,7 @@ class Daily {
 
   @override
   String toString() {
-    return 'Daily{dt: $dt, sunrise: $sunrise, sunset: $sunset, temp: $temp}';
+    return '{dt: $dt, sunrise: $sunrise, sunset: $sunset, temp: $temp}';
   }
 }
 

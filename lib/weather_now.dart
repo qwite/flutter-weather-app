@@ -14,15 +14,15 @@ class WeatherNow extends StatelessWidget {
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-           Text(
-            '${Provider.of<Settings>(context).settings["current_temp_celsius"].toString()}° now',
-            textDirection: TextDirection.ltr,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 60,
-            ),
+        Text(
+          '${Provider.of<Settings>(context).config["current_temp"].toString()}° now',
+          textDirection: TextDirection.ltr,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 60,
           ),
+        ),
       ],
     );
   }

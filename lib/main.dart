@@ -10,9 +10,6 @@ import 'package:mobile_flutter/weather_on_day.dart';
 import 'package:mobile_flutter/weather_on_week.dart';
 import 'package:mobile_flutter/load.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile_flutter/api.dart';
-
-
 
 void main() {
   runApp(MyApp());
@@ -43,7 +40,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  // Future<WeatherModel> _weatherModel;
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
@@ -56,12 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int toggleIndex = 0;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF4A4981),
@@ -72,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
-                'San Francisco, CA',
+              Text(
+                '${Provider.of<Settings>(context).config["location"]}, ${Provider.of<Settings>(context).config["country"]}',
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -83,8 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 34),
-                child:  Text(
-                  Provider.of<Settings>(context).settings["current_dayOfWeek"].toString().toUpperCase(),
+                child: Text(
+                  Provider.of<Settings>(context)
+                      .config["current_dayOfWeek"]
+                      .toString()
+                      .toUpperCase(),
                   style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w400,
@@ -95,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 margin: const EdgeInsets.only(top: 2),
                 child: Text(
-                  'sunrise ${Provider.of<Settings>(context).settings["sunrise_value"].toString()} am | sunset ${Provider.of<Settings>(context).settings["sunset_value"].toString()} pm',
+                  'sunrise ${Provider.of<Settings>(context).config["sunrise_value"].toString()} am | sunset ${Provider.of<Settings>(context).config["sunset_value"].toString()} pm',
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -169,6 +162,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (index) {
                   setState(() {
                     toggleIndex = index;
+                    Settings.tempIndex = toggleIndex;
+                    context.read<Settings>().convertTemp(toggleIndex);
                   });
                 },
               ),

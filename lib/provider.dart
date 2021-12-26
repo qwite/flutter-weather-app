@@ -1,151 +1,211 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
+import 'Models/position_model.dart';
+import 'Models/weather_timeline_model.dart';
+
 class Settings extends ChangeNotifier {
-  Map settings = {
-    "city": "Saint Petersburg",
-    "country": "RU",
+  Map config = {
+    "position_lat": "",
+    "position_long": "",
+    "location": "",
+    "country": "",
     "current_dayOfWeek": "",
     "current_dayOfWeekKey": "",
     "current_timeTimestamp": "",
-    "current_temp_celsius": "",
-    "current_temp_fahrenheit": "",
+    "current_temp": "",
+    "current_temp_c": "",
+    "current_temp_f": "",
     "sunrise_value": "",
     "sunset_value": "",
     "daily": {
-      "morning": {"temp": "", "weather": ""},
-      "day": {"temp": "", "weather": ""},
-      "evening": {"temp": "", "weather": ""},
-      "night": {"temp": "", "weather": ""},
+      "morning": {"temp": "", "temp_c": "", "temp_f": "", "weather": ""},
+      "day": {"temp": "", "temp_c": "", "temp_f": "", "weather": ""},
+      "evening": {"temp": "", "temp_c": "", "temp_f": "", "weather": ""},
+      "night": {"temp": "", "temp_c": "", "temp_f": "", "weather": ""},
     }
   };
 
-  static Map weekly_config = {
-    "MON": {},
-    "TUE": {},
-    "WED": {},
-    "THU": {},
-    "FRI": {},
-    "SAT": {},
-    "SUN": {},
-  };
+  List<Daily> dailyData = [];
+  List dailyKeys = [];
 
-  void pushMorning(temp, weather, key) {
-    weekly_config[key]["morning"]["temp"] = temp.round().toString();
-    weekly_config[key]["morning"]["weather"] = weather;
+  static var tempIndex = 0;
+
+  List setDailyData(List<Daily> daily) {
+    print(daily.length);
+    for (var val in daily) {
+      var dt = DateTime.fromMillisecondsSinceEpoch(val.dt * 1000);
+      String key = DateFormat('E').format(dt).toUpperCase();
+
+      // String key = DateFormat('E').format(DateTime(val.dt)).toUpperCase();
+      dailyKeys.add(key);
+    }
+    log(dailyKeys.toString());
+
+    // log(dailyKeys.toString());
+
+    return dailyData = daily;
+  }
+
+  String getKeyFromData(int index) {
+    return dailyKeys[index];
+  }
+
+  List<Daily> getDailyData() {
+    return dailyData;
+  }
+
+  void convertTemp(int index) {
+    switch (index) {
+      case 0:
+        config["current_temp"] = config["current_temp_c"];
+        config["daily"]["morning"]["temp"] =
+            config["daily"]["morning"]["temp_c"];
+        config["daily"]["day"]["temp"] = config["daily"]["day"]["temp_c"];
+        config["daily"]["evening"]["temp"] =
+            config["daily"]["evening"]["temp_c"];
+        config["daily"]["night"]["temp"] = config["daily"]["night"]["temp_c"];
+        break;
+      case 1:
+        config["current_temp"] = config["current_temp_f"];
+        config["daily"]["morning"]["temp"] =
+            config["daily"]["morning"]["temp_f"];
+        config["daily"]["day"]["temp"] = config["daily"]["day"]["temp_f"];
+        config["daily"]["evening"]["temp"] =
+            config["daily"]["evening"]["temp_f"];
+        config["daily"]["night"]["temp"] = config["daily"]["night"]["temp_f"];
+        break;
+    }
+
     notifyListeners();
   }
 
-  void pushDay(temp, weather, key) {
-    weekly_config[key]["day"]["temp"] = temp.round().toString();
-    weekly_config[key]["day"]["weather"] = weather;
-    notifyListeners();
-  }
+  void setConfig(daily) {
+    // log(daily.temp.day.toString());
+    config["daily"]["morning"]["temp_c"] = daily.temp.morn.round().toString();
+    config["daily"]["morning"]["temp_f"] =
+        ((int.parse(daily.temp.morn.round().toString()) * 1.8) + 32)
+            .toStringAsFixed(0);
 
-  void pushEvening(temp, weather, key) {
-    weekly_config[key]["evening"]["temp"] = temp.round().toString();
-    weekly_config[key]["evening"]["weather"] = weather;
-    notifyListeners();
-  }
+    config["daily"]["day"]["temp_c"] = daily.temp.day.round().toString();
+    config["daily"]["day"]["temp_f"] =
+        ((int.parse(daily.temp.day.round().toString()) * 1.8) + 32)
+            .toStringAsFixed(0);
 
-  void pushNight(temp, weather, key) {
-    weekly_config[key]["night"]["temp"] = temp.round().toString();
-    weekly_config[key]["night"]["weather"] = weather;
-    notifyListeners();
-  }
+    config["daily"]["evening"]["temp_c"] = daily.temp.eve.round().toString();
+    config["daily"]["evening"]["temp_f"] =
+        ((int.parse(daily.temp.eve.round().toString()) * 1.8) + 32)
+            .toStringAsFixed(0);
 
-  void setCurrentDay(String currentDay, String currentDayKey) {
-    settings["current_dayOfWeek"] = currentDay;
-    settings["current_dayOfWeekKey"] = currentDayKey;
+    config["daily"]["night"]["temp_c"] = daily.temp.night.round().toString();
+    config["daily"]["night"]["temp_f"] =
+        ((int.parse(daily.temp.night.round().toString()) * 1.8) + 32)
+            .toStringAsFixed(0);
+
+    convertTemp(tempIndex);
+
+    var sunriseNormalize =
+        DateTime.fromMillisecondsSinceEpoch(daily.sunrise * 1000);
+    var sunriseFormat =
+        DateFormat('HH:mm').format(sunriseNormalize); // 31/12/2000, 22:00
+
+    var sunsetNormalize =
+        DateTime.fromMillisecondsSinceEpoch(daily.sunset * 1000);
+    var sunsetFormat = DateFormat('HH:mm').format(sunsetNormalize);
+
+    config["sunrise_value"] = sunriseFormat;
+    config["sunset_value"] = sunsetFormat;
+
+    var dayNormalize = DateTime.fromMillisecondsSinceEpoch(daily.dt * 1000);
+    var day = DateFormat('MMMEd').format(dayNormalize);
+
+    config["current_dayOfWeek"] = day;
 
     notifyListeners();
   }
 
   void setCurrentTime(String currentTime) {
-    settings["current_timeTimestamp"] = currentTime;
-  }
-
-  String getCurentDayKey() {
-    return settings["current_dayOfWeekKey"];
-    notifyListeners();
+    config["current_timeTimestamp"] = currentTime;
   }
 
   String getCurrentTime() {
-    return settings["current_timeTimestamp"];
+    return config["current_timeTimestamp"];
   }
 
-  String getMorningTemp(key) {
-    return weekly_config[key]["morning"]["temp"];
+  String getMorningTemp() {
+    return config["daily"]["morning"]["temp"];
   }
 
-  String getMorningWeather(key) {
-    return weekly_config[key]["morning"]["weather"];
+  String getMorningWeather() {
+    return config["daily"]["morning"]["weather"];
   }
 
-  String getDayTemp(key) {
-    return weekly_config[key]["day"]["temp"];
+  String getDayTemp() {
+    return config["daily"]["day"]["temp"];
   }
 
-  String getDayWeather(key) {
-    return weekly_config[key]["day"]["weather"];
+  String getDayWeather() {
+    return config["daily"]["day"]["weather"];
   }
 
-  String getEveningTemp(key) {
-    return weekly_config[key]["evening"]["temp"];
+  String getEveningTemp() {
+    return config["daily"]["evening"]["temp"];
   }
 
-  String getEveningWeather(key) {
-    return weekly_config[key]["evening"]["weather"];
+  String getEveningWeather() {
+    return config["daily"]["evening"]["weather"];
   }
 
-  String getNightTemp(key) {
-    return weekly_config[key]["night"]["temp"];
+  String getNightTemp() {
+    return config["daily"]["night"]["temp"];
   }
 
-  String getNightWeather(key) {
-    return weekly_config[key]["night"]["weather"];
+  String getNightWeather() {
+    return config["daily"]["night"]["weather"];
   }
 
-  Map getDailyData() {
-    return weekly_config;
-  }
+  void setPositionData(PositionModel pos) {
+    config["location"] = pos.name;
+    config["country"] = pos.sys.country;
 
-  void setSunValues(int sunrise, int sunset) {
-    var sunriseNormalize = DateTime.fromMillisecondsSinceEpoch(sunrise * 1000);
-    var sunriseFormat =
-        DateFormat('HH:mm').format(sunriseNormalize); // 31/12/2000, 22:00
-
-    var sunsetNormalize = DateTime.fromMillisecondsSinceEpoch(sunset * 1000);
-    var sunsetFormat = DateFormat('HH:mm').format(sunsetNormalize);
-
-    settings["sunrise_value"] = sunriseFormat;
-    settings["sunset_value"] = sunsetFormat;
+    notifyListeners();
   }
 
   void setTempValue(num temp) {
     var tempInCelsius = temp.toStringAsFixed(0);
-    settings["current_temp_celsius"] = tempInCelsius;
-    settings["current_temp_fahrenheit"] =
+    config["current_temp_c"] = tempInCelsius;
+    config["current_temp_f"] =
         ((int.parse(tempInCelsius) * 1.8) + 32).toStringAsFixed(0);
+
+    log(tempInCelsius.toString());
+    config["current_temp"] = config["current_temp_c"];
   }
 
-  String getWeatherIcon(dayState, key) {
-    var weather = weekly_config[key][dayState]["weather"];
-    var asset = "";
-    switch (weather) {
-      case "Sun":
-        asset = "sun.fill";
-        break;
-      case "Clouds":
-        asset = "cloud";
-        break;
-      case "Rain":
-        asset = "cloud.rain";
-        break;
-      case "Snow":
-        asset = "cloud.snow";
-    }
-
-    return "assets/$asset.svg";
+  void setPosition(Position pos) {
+    config["position_lat"] = pos.latitude;
+    config["position_long"] = pos.longitude;
   }
+
+// String getWeatherIcon(dayState, key) {
+//   var weather = config["daily"][dayState]["weather"];
+//   var asset = "";
+//   switch (weather) {
+//     case "Sun":
+//       asset = "sun.fill";
+//       break;
+//     case "Clouds":
+//       asset = "cloud";
+//       break;
+//     case "Rain":
+//       asset = "cloud.rain";
+//       break;
+//     case "Snow":
+//       asset = "cloud.snow";
+//   }
+//
+//   return "assets/$asset.svg";
+// }
 }

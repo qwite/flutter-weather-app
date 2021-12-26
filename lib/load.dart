@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 import 'package:mobile_flutter/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:mobile_flutter/api.dart';
 import 'package:mobile_flutter/Models/weather_timeline_model.dart';
+
+import 'Models/position_model.dart';
 
 class Load extends StatefulWidget {
   const Load({
@@ -19,97 +20,74 @@ class Load extends StatefulWidget {
 
 class _LoadState extends State<Load> with SingleTickerProviderStateMixin {
   void setUp() async {
-    await getCurrentDayInfo();
-    await getCurrentTime();
-    await prepareWeeklyMap();
+    // await getCurrentTime();
     await makeApiRequest();
 
     Navigator.pushReplacementNamed(context, '/home');
   }
 
-  Future<void> getCurrentTime() async {
-    final now = DateTime.now().millisecondsSinceEpoch;
-    var time = (now / 1000).round().toString();
-    return context.read<Settings>().setCurrentTime(time);
-  }
+  // Future<void> getCurrentTime() async {
+  //   final now = DateTime.now().millisecondsSinceEpoch;
+  //   var time = (now / 1000).round().toString();
+  //   return context.read<Settings>().setCurrentTime(time);
+  // }
 
-  Future<void> getCurrentDayInfo() async {
-    final now = DateTime.now();
-    String currentDay = DateFormat('MMMEd').format(now);
-    String key = DateFormat('E').format(now).toUpperCase();
-    return context.read<Settings>().setCurrentDay(currentDay, key);
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    Position position = await Geolocator.getCurrentPosition() as Position;
+    print(position);
+    return position;
   }
 
   Future<void> makeApiRequest() async {
     var api = Api();
-    WeatherTimeline _timelineModel;
-    WeatherTimeline _eveningModel;
-    var currentTime = context.read<Settings>().getCurrentTime();
-    var key = context.read<Settings>().getCurentDayKey();
 
-    print(currentTime);
+    Position pos = await _determinePosition();
 
-    _timelineModel =
-        (await api.getTimelineData("59.985174", "30.384144", currentTime))!;
-    _eveningModel = await api.getEveningData("59.985174", "30.384144");
+    PositionModel _posModel;
+    WeatherTimeline _apiModel;
+    // var currentTime = context.read<Settings>().getCurrentTime();
+    // var key = context.read<Settings>().getCurentDayKey();
 
-    print(_timelineModel.hourly.length);
-    parseData(_timelineModel.hourly); // обрабатываем данные день-утро
-    parseData(_eveningModel.hourly); // обрабатываем данные вечер-ночь
+    // print(currentTime);
 
-    context.read<Settings>().setSunValues(
-        _timelineModel.current.sunrise, _timelineModel.current.sunset);
-    context.read<Settings>().setTempValue(_timelineModel.current.temp);
-  }
+    _posModel = await api.getApiPosition(
+        pos.latitude.toString(), pos.longitude.toString());
+    context.read<Settings>().setPositionData(_posModel);
 
-  void parseData(data) {
-    var fl = false;
+    _apiModel = await api.getApiQuery(
+        pos.latitude.toString(), pos.longitude.toString());
+    context.read<Settings>().setDailyData(_apiModel.daily);
+    context.read<Settings>().setConfig(_apiModel.daily[0]); // устанавливаем
+    // погоду на сегодня
 
-    for (int i = 0; i < data.length; i++) {
-      var hour = DateTime.fromMillisecondsSinceEpoch(data[i].dt * 1000);
-      var hour_format = DateFormat('hh:mm a').format(hour);
-      var temp = data[i].temp;
-      var weather = data[i].weather[0].main;
-      var key = context.read<Settings>().getCurentDayKey();
-      print(hour_format);
-
-      switch (hour_format) {
-        case "06:00 AM":
-          context.read<Settings>().pushMorning(temp, weather, key);
-          break;
-        case "12:00 PM":
-          context.read<Settings>().pushDay(temp, weather, key);
-          break;
-        case "06:00 PM":
-          context.read<Settings>().pushEvening(temp, weather, key);
-          break;
-        case "12:00 AM":
-          context.read<Settings>().pushNight(temp, weather, key);
-          fl = true;
-          break;
-      }
-
-      if (fl) {
-        break;
-      }
-
-    }
-  }
-
-  Future<void> prepareWeeklyMap() async {
-    Map data = {
-      "morning": {"temp": "", "weather": ""},
-      "day": {"temp": "", "weather": ""},
-      "evening": {"temp": "", "weather": ""},
-      "night": {"temp": "", "weather": ""}
-    };
-
-    var _settings = Settings.weekly_config;
-    for (var k in _settings.keys) {
-      _settings[k] = data;
-    }
-
-    return;
+    context.read<Settings>().setTempValue(_apiModel.current.temp);
   }
 
   @override
